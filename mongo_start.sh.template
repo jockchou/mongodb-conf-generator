@@ -1,3 +1,0 @@
-#!/bin/bash
-
-/usr/local/mongodb/bin/mongod --fork --config #basedir#/cfg/#node#/cnf/cfg.conf
