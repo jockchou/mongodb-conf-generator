@@ -54,3 +54,35 @@ define("RS_NODE_NUM", 3);
 
 ## 模板修改: ##
 三个模板文件定义了MongoDB各进程的常见配置，你可以修改这些配置项。##是将被替换的动态部分。
+
+
+##脚本输出：##
+
+运行脚本后，你将看到类似以下输出：
+
+```
+C:\data\GitRoot\mongodb-conf-generator>php generator.php
+
+cfg->node0->4000
+cfg->node1->4001
+cfg->node2->4002
+
+rs0->node0->4003
+rs0->node1->4004
+rs0->node2->4005
+
+rs1->node0->4006
+rs1->node1->4007
+rs1->node2->4008
+
+rs2->node0->4009
+rs2->node1->4010
+rs2->node2->4011
+
+mongos----->4012
+```
+
+cfg表示配置服务器
+node表示节点
+rs表示是复制集
+最右边的数字是端口号 
