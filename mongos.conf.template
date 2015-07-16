@@ -1,0 +1,23 @@
+#进程
+processManagement:
+    fork: true
+    pidFilePath: #basedir#/mongos/mongos.pid
+    
+    
+#网络
+net:
+    bindIp: #bindIp#
+    port: #port#
+    
+    
+#日志
+systemLog:
+    destination: file
+    path: #basedir#/mongos/log/mongos.log
+    logAppend: true
+    verbosity: 0
+    
+    
+#分片
+sharding:
+    configDB: 127.0.0.1:40006
