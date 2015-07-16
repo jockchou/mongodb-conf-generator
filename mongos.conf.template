@@ -1,16 +1,16 @@
-#进程
+#process
 processManagement:
     fork: true
     pidFilePath: #basedir#/mongos/mongos.pid
     
     
-#网络
+#net
 net:
     bindIp: #bindIp#
     port: #port#
     
     
-#日志
+#log
 systemLog:
     destination: file
     path: #basedir#/mongos/log/mongos.log
@@ -18,6 +18,6 @@ systemLog:
     verbosity: 0
     
     
-#分片
+#shard
 sharding:
     configDB: #configDB#

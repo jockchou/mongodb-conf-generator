@@ -1,16 +1,16 @@
-#进程
+#process
 processManagement:
     fork: true
     pidFilePath: #basedir#/#rs#/#node#/mongod.pid
 
     
-#网络
+#net
 net:
     bindIp: #bindIp#
     port: #port#
 
     
-#存储
+#storage
 storage:
     dbPath: #basedir#/#rs#/#node#/data
     journal:
@@ -29,7 +29,7 @@ storage:
             prefixCompression: true
 
             
-#日志
+#log
 systemLog:
     destination: file
     path: #basedir#/#rs#/#node#/log/mongod.log
@@ -37,19 +37,19 @@ systemLog:
     verbosity: 0
 
     
-#操作
+#profiling
 operationProfiling:
     slowOpThresholdMs: 100
     mode: slowOp
 
     
-#复制
+#replication
 replication:
     oplogSizeMB: 1024
     replSetName: #rs#
 
     
-#分片
+#shard
 sharding:
     clusterRole: shardsvr
     archiveMovedChunks: true
