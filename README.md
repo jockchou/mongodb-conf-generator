@@ -34,15 +34,18 @@ generator.php文件的上面定义了一些常量，你可以修改这些常量�
 
 ```
 //帮定IP
-define("BIND_IP", "127.0.0.1,192.168.100.10,192.168.100.11,192.168.100.12");
+define("BIND_IP", "127.0.0.1,192.168.100.18");
 
-//服务器上mongodb bin目录
+//配置服务器IP，IP个数与配置服务器个数保持相同
+define("CFG_IP", "192.168.100.10,192.168.100.11,192.168.100.12");
+
+//mongodb bin目录
 define("BINPATH", "/usr/local/mongodb/bin");
 
 //超始端口号
 define("START_PORT", 4000);
 
-//配制服务器个数
+//配置服务器个数
 define("CFG_SVR_NUM", 3);
 
 //分片个数

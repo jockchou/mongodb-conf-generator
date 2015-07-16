@@ -20,4 +20,4 @@ systemLog:
     
 #·ÖÆ¬
 sharding:
-    configDB: 127.0.0.1:40006
+    configDB: #configDB#

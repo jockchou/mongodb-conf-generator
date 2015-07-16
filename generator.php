@@ -3,7 +3,10 @@
 define("BASEDIR", str_replace("\\", "/", dirname(__FILE__)));
 
 //帮定IP
-define("BIND_IP", "127.0.0.1,192.168.100.10,192.168.100.11,192.168.100.12");
+define("BIND_IP", "127.0.0.1,192.168.100.18");
+
+//配置服务器IP，IP个数与配置服务器个数保持相同
+define("CFG_IP", "192.168.100.10,192.168.100.11,192.168.100.12");
 
 //mongodb bin目录
 define("BINPATH", "/usr/local/mongodb/bin");
@@ -11,7 +14,7 @@ define("BINPATH", "/usr/local/mongodb/bin");
 //超始端口号
 define("START_PORT", 4000);
 
-//配制服务器个数
+//配置服务器个数
 define("CFG_SVR_NUM", 3);
 
 //分片个数
@@ -20,6 +23,9 @@ define("RS_NUM", 3);
 //复制集节点数
 define("RS_NODE_NUM", 3);
 
+$cfgdb_port_group = array();
+
+//创建配置服务器目录
 function create_cfg_path() {
     echo "\n";
     
@@ -38,6 +44,7 @@ function create_cfg_path() {
     echo "\n";
 }
 
+//创建复制集目录
 function create_rs_path() {
     for($i = 0; $i < RS_NUM; $i++) {
         for($j = 0; $j < RS_NODE_NUM; $j++) {
@@ -58,6 +65,7 @@ function create_rs_path() {
     }
 }
 
+//创建路由服务器目录
 function create_mongos_path() {
     
     $cnf_dir = "./mongos/cnf";
@@ -71,6 +79,7 @@ function create_mongos_path() {
     echo "\n";
 }
 
+//生成复制集配置文件
 function write_rs_cnf($cnf_dir, $rs, $node) {
 
     $port = START_PORT + CFG_SVR_NUM + RS_NODE_NUM * $rs + $node;
@@ -86,7 +95,7 @@ function write_rs_cnf($cnf_dir, $rs, $node) {
     $contents = str_replace("#port#", $port, $contents);
     $contents = str_replace("#bindIp#", BIND_IP, $contents);
     
-    $fp = fopen($cnf_dir . "/mongod.conf", 'w');
+    $fp = fopen($cnf_dir . "/mongod.conf", 'w,ccs=UTF-8');
     fwrite($fp, $contents);
     
     fclose($fp);
@@ -94,7 +103,7 @@ function write_rs_cnf($cnf_dir, $rs, $node) {
     
     $shell = BINPATH . "/mongod --fork --config " . BASEDIR ."/$rsName/$nodeName/cnf/mongod.conf &";
     $sh_file = BASEDIR . "/$rsName/$nodeName/mongostart.sh";
-    $shfp = fopen($sh_file, 'w');
+    $shfp = fopen($sh_file, 'w,ccs=UTF-8');
     fwrite($shfp, "#!/bin/bash\n\n");
     fwrite($shfp, $shell);
     fclose($shfp);
@@ -103,7 +112,10 @@ function write_rs_cnf($cnf_dir, $rs, $node) {
     
 }
 
+//生成配置服务器配置文件
 function write_cfg_cnf($cnf_dir, $node) {
+    global $cfgdb_port_group;
+    
     $port = START_PORT + $node;
     $nodeName = "node" . $node;
     
@@ -115,7 +127,8 @@ function write_cfg_cnf($cnf_dir, $node) {
     $contents = str_replace("#port#", $port, $contents);
     $contents = str_replace("#bindIp#", BIND_IP, $contents);
     
-    $fp = fopen($cnf_dir . "/cfg.conf", 'w');
+    array_push($cfgdb_port_group, $port);
+    $fp = fopen($cnf_dir . "/cfg.conf", 'w,ccs=UTF-8');
     fwrite($fp, $contents);
     
     fclose($fp);
@@ -123,7 +136,7 @@ function write_cfg_cnf($cnf_dir, $node) {
     
     $shell = BINPATH . "/mongod --fork --config " . BASEDIR ."/cfg/{$nodeName}/cnf/cfg.conf &";
     $sh_file = BASEDIR . "/cfg/{$nodeName}/mongostart.sh";
-    $shfp = fopen($sh_file, 'w');
+    $shfp = fopen($sh_file, 'w,ccs=UTF-8');
     fwrite($shfp, "#!/bin/bash\n\n");
     fwrite($shfp, $shell);
     fclose($shfp);
@@ -131,7 +144,10 @@ function write_cfg_cnf($cnf_dir, $node) {
     echo "cfg->$nodeName->$port\n";
 }
 
+//生成路由服务器配置文件
 function write_mongos_cnf($cnf_dir) {
+    global $cfgdb_port_group;
+
     $port = START_PORT + CFG_SVR_NUM + (RS_NUM * RS_NODE_NUM);
     
     $mongos_tpl_file = "./mongos.conf.template";
@@ -140,8 +156,16 @@ function write_mongos_cnf($cnf_dir) {
     $contents = str_replace("#basedir#", BASEDIR, $contents);
     $contents = str_replace("#port#", $port, $contents);
     $contents = str_replace("#bindIp#", BIND_IP, $contents);
-
-    $fp = fopen($cnf_dir . "/mongos.conf", 'w');
+    
+    $cfg_ip_group = explode(",", CFG_IP);
+    $cfgdb_port_str = array();
+    foreach($cfgdb_port_group as $n => $cfg_port) {
+        if ($n < count($cfg_ip_group))
+        array_push($cfgdb_port_str, $cfg_ip_group[$n] . ":" . $cfg_port);
+    }
+    $contents = str_replace("#configDB#", implode(",", $cfgdb_port_str), $contents);
+     
+    $fp = fopen($cnf_dir . "/mongos.conf", 'w,ccs=UTF-8');
     fwrite($fp, $contents);
     
     fclose($fp);
@@ -149,7 +173,7 @@ function write_mongos_cnf($cnf_dir) {
     
     $shell = BINPATH . "/mongos --fork --config " . BASEDIR ."/mongos/cnf/mongos.conf &";
     $sh_file = BASEDIR . "/mongos/mongostart.sh";
-    $shfp = fopen($sh_file, 'w');
+    $shfp = fopen($sh_file, 'w,ccs=UTF-8');
     fwrite($shfp, "#!/bin/bash\n\n");
     fwrite($shfp, $shell);
     fclose($shfp);
@@ -157,6 +181,7 @@ function write_mongos_cnf($cnf_dir) {
     echo "mongos----->$port\n";
 }
 
+//入口函数
 function main() {
     create_cfg_path();
     
