@@ -13,10 +13,10 @@
 ```
 
 
-> cfg.conf.template   ： 集群配制服务器配制文件模板
-> mongod.conf.template： mongod进程配制文件模板
-> mongos.conf.template： mongos路由进程配制文件模板
-> generator.php       ： 自动生成配制文件的PHP脚本
+> cfg.conf.template   ： 集群配制服务器配制文件模板  
+> mongod.conf.template： mongod进程配制文件模板  
+> mongos.conf.template： mongos路由进程配制文件模板  
+> generator.php       ： 自动生成配制文件的PHP脚本  
 
 
 ## 脚本使用方法： ##
