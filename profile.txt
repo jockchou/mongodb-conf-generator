@@ -1,0 +1,17 @@
+cfg->node0->40000
+cfg->node1->40001
+cfg->node2->40002
+
+rs0->node0->40003
+rs0->node1->40004
+rs0->node2->40005
+
+rs1->node0->40006
+rs1->node1->40007
+rs1->node2->40008
+
+rs2->node0->40009
+rs2->node1->40010
+rs2->node2->40011
+
+mongos----->40012
