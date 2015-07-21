@@ -64,28 +64,26 @@ define("RS_NODE_NUM", 3);
 运行脚本后，你将看到类似以下输出：
 
 ```
-C:\data\GitRoot\mongodb-conf-generator>php generator.php
+cfg->node0->40000
+cfg->node1->40001
+cfg->node2->40002
 
-cfg->node0->4000
-cfg->node1->4001
-cfg->node2->4002
+rs0->node0->40003
+rs0->node1->40004
+rs0->node2->40005
 
-rs0->node0->4003
-rs0->node1->4004
-rs0->node2->4005
+rs1->node0->40006
+rs1->node1->40007
+rs1->node2->40008
 
-rs1->node0->4006
-rs1->node1->4007
-rs1->node2->4008
+rs2->node0->40009
+rs2->node1->40010
+rs2->node2->40011
 
-rs2->node0->4009
-rs2->node1->4010
-rs2->node2->4011
-
-mongos----->4012
+mongos----->40012
 ```
 
 - cfg： 表示配置服务器  
 - node： 表示节点  
 - rs： 示是复制集  
-- 4000： 最右边的数字是端口号  
+- 40000： 最右边的数字是端口号  
